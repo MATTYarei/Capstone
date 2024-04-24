@@ -1,0 +1,7 @@
+User ID,First Name,Last Name,Phone,Email,Active,Date Created,Hire Date,User Type
+1,Joe,Doe,123-456-7890,john@example.com,1,2024-01-01,2022-01-01,user
+2,Bob,Smith,987-654-3210,jane@example.com,1,2024-01-02,2022-01-02,manager
+3,Alice,Johnson,456-789-0123,alice@example.com,1,2024-01-03,2022-01-03,user
+4,A,A,123456789,A,1,04/17/24,04/17/24,user
+5,B,B,457481348,B,1,04/17/24,Enter their hire date (YYYY-MM-DD):),user
+6,C,C,15487324156,hasd,1,04/23/24,Enter their hire date (YYYY-MM-DD): ,user
