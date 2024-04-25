@@ -1,8 +1,13 @@
 import sqlite3
+import bcrypt
 
 connection = sqlite3.connect('capstone_database.db')
 
 cursor = connection.cursor()
+
+
+salt = bcrypt.gensalt()
+hashed_password = bcrypt.hashpw("password".encode("utf-8"), salt)
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Users (
@@ -12,10 +17,10 @@ cursor.execute('''
         phone TEXT,
         email TEXT NOT NULL UNIQUE,
         password_hash TEXT NOT NULL UNIQUE,
-        active INTEGER NOT NULL,
+        active INTEGER NOT NULL DEFAULT 1,
         date_created TEXT,
         hire_date TEXT,
-        user_type TEXT NOT NULL
+        user_type TEXT NOT NULL DEFAULT 'user'
     )
 ''')
 
@@ -52,9 +57,9 @@ cursor.execute('''
 ''')
 
 users_data = [
-    (1, 'John', 'Doe', '123-456-7890', 'john@example.com', 'hashed_password_1', 1, '2024-01-01', '2022-01-01', 'user'),
-    (2, 'Jane', 'Smith', '987-654-3210', 'jane@example.com', 'hashed_password_2', 1, '2024-01-02', '2022-01-02', 'manager'),
-    (3, 'Alice', 'Johnson', '456-789-0123', 'alice@example.com', 'hashed_password_3', 1, '2024-01-03', '2022-01-03', 'user')
+    (1, 'John', 'Doe', '123-456-7890', 'john@example.com', hashed_password, 1, '2024-01-01', '2022-01-01', 'user'),
+    (2, 'Jane', 'Smith', '987-654-3210', 'jane@example.com', hashed_password, 1, '2024-01-02', '2022-01-02', 'manager'),
+    (3, 'Alice', 'Johnson', '456-789-0123', 'alice@example.com', hashed_password, 1, '2024-01-03', '2022-01-03', 'user')
 ]
 
 competencies_data = [

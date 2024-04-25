@@ -32,8 +32,15 @@ class User:
     
     def user_view(self):
 
-        print(f"""User Id: {self.user_id}\nFirst Name: {self.first_name}\nLast Name: {self.last_name}\nPhone: {self.phone}\nEmail: {self.email}
-Active: {self.active}\nDate Created: {self.date_created}\nHire Date: {self.hire_date}\nUser Type: {self.user_type}""")
+        print(f"""User Id: {self.user_id}
+First Name: {self.first_name}
+Last Name: {self.last_name}
+Phone: {self.phone}
+Email: {self.email}
+Active: {self.active}
+Date Created: {self.date_created}
+Hire Date: {self.hire_date}
+User Type: {self.user_type}""")
         
         
     def user_competency_report(self):
@@ -175,8 +182,7 @@ def manager_all_user_assessments():
     
     print(f"Assessment results for {first_name} {last_name}")
     print(f'{"Assessment Name":<30}{"Score":<10}{"Date Taken":<15}')
-    for assessment in assessment_results:
-        assessment_name, score, date_taken = assessment
+    for assessment_name, score, date_taken in assessment_results:
         print(f"{assessment_name:<30}{score:<10}{date_taken:<15}")
 
     
@@ -232,16 +238,14 @@ def manager_edit():
 
 
 def manager_add_user():
-
-    salt = bcrypt.gensalt()
-
     print("***Create a new user***\nPlease fill out the following information:")
     first_name = input("Enter first name: ")
     last_name = input("Enter last name: ")
     phone = input("Enter phone number: ")
     email = input("Enter email: ")
-    hire_date = ("Enter their hire date (YYYY-MM-DD): ")
+    hire_date = input("Enter their hire date (YYYY-MM-DD): ")
     password = input("Enter password: ")
+    salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode("utf-8"), salt)
     date_created = datetime.now().strftime("%x")
 
@@ -261,7 +265,7 @@ def manager_add_competency():
 
     print("***Adding a new competency***")
 
-    name = input("Enter the name of the new competecy: ")
+    name = input("Enter the name of the new competency: ")
     date_created = datetime.now().strftime('%x')
 
     if name == '':
@@ -420,8 +424,7 @@ def import_assessment_results_from_csv():
                 csv_reader = csv.reader(csv_file)
                 next(csv_reader) 
                 
-                for row in csv_reader:
-                    user_id, assessment_id, score, date_taken, manager_id = row
+                for user_id, assessment_id, score, date_taken, manager_id in csv_reader:
                     cursor.execute("INSERT INTO Assessment_Results (user_id, assessment_id, score, date_taken, manager_id) VALUES (?, ?, ?, ?, ?)",(user_id, assessment_id, score, date_taken, manager_id))
                     
                 connection.commit()
@@ -441,9 +444,9 @@ def login_menu():
         login_choice = input("Welcome!\n1: Login\n2: Exit\nWhat would you like to do? ")
 
         if login_choice == "1":
-            user_id = input("Login id: ")
+            user_email = input("Email: ")
             password_hash = input("Password: ")
-            login_check = cursor.execute("SELECT * FROM Users WHERE user_id = ? AND active = 1",(user_id,)).fetchone()
+            login_check = cursor.execute("SELECT * FROM Users WHERE email = ? AND active = 1",(user_email,)).fetchone()
 
             if login_check:
                 password_check = bcrypt.checkpw(password_hash.encode("utf-8"), login_check[5])
